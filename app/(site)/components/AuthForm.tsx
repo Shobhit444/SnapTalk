@@ -53,39 +53,41 @@ const AuthForm = () => {
   
     if (variant === 'REGISTER') {
       axios.post('/api/register', data)
-      // .then(() => signIn('credentials', {
-      //   ...data,
-      //   redirect: false,
-      // }))
+      .then(() => signIn('credentials', {
+        ...data,
+        redirect: false,
+      }))
       
-      // .then((callback) => {
-      //   if (callback?.error) {
-      //     toast.error('Invalid credentials!');
-      //   }
+      .then((callback) => {
+        if (callback?.error) {
+          toast.error('Invalid credentials!');
+        }
 
-      //   if (callback?.ok) {
-      //     router.push('/conversations')
-      //   }
-      // })
-      // .catch(() => toast.error('Something went wrong!'))
-      // .finally(() => setIsLoading(false))
+        if (callback?.ok) {
+          router.push('/conversations')
+          toast.success('Successfully Registered!')
+        }
+      })
+      .catch(() => toast.error('Something went wrong!'))
+      .finally(() => setIsLoading(false))
     }
 
     if (variant === 'LOGIN') {
-      // signIn('credentials', {
-      //   ...data,
-      //   redirect: false
-      // })
-      // .then((callback) => {
-      //   if (callback?.error) {
-      //     toast.error('Invalid credentials!');
-      //   }
+      signIn('credentials', {
+        ...data,
+        redirect: false
+      })
+      .then((callback) => {
+        if (callback?.error) {
+          toast.error('Invalid credentials!');
+        }
 
-      //   if (callback?.ok) {
-      //     router.push('/conversations')
-      //   }
-      // })
-      // .finally(() => setIsLoading(false))
+        if (callback?.ok) {
+          router.push('/conversations')
+          toast.success('Logged in!')
+        }
+      })
+      .finally(() => setIsLoading(false))
     }
   }
 
