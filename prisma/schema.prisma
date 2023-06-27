@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  name            String?
+  email           String?   @unique
+  emailVerified   DateTime?
+  image           String?
+  hashedPassword  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  conversationIds String[] @db.ObjectId
+  conversations Conversation[] @relation(fields: [conversationIds], references: [id])
+  //this prop maps our conversation model as an array which uses convIds which refer to id of this conversation
+// on to many type of relation
+  seenMessageIds String[] @db.ObjectId
+  seenMessages Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
+
+  accounts Account[]//association with multiple accounts, one to many relation 
+  messages Message[]
+}
+
+model Account {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String   @db.ObjectId
+  type               String
+  provider           String//provider associated with an account
+  providerAccountId  String
+  refresh_token      String?  @db.String
+  access_token       String?  @db.String
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.String
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+//we are mapping our user model to this user id field in this model and we are refering to the id of user model
+  @@unique([provider, providerAccountId])// ye dono unique comb hona chahiye
+}//This means that no two records can have the same provider and providerAccountId values.
+
+model Conversation {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt       DateTime @default(now())
+  lastMessageAt DateTime @default(now())
+  name String?
+  isGroup Boolean?
+  
+  messagesIds String[] @db.ObjectId
+  messages Message[]
+
+  userIds String[] @db.ObjectId
+  users User[] @relation(fields: [userIds], references: [id])
+}
+
+model Message {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  body String?
+  image String?
+  createdAt DateTime @default(now())
+
+  seenIds String[] @db.ObjectId
+  seen User[] @relation("Seen", fields: [seenIds], references: [id])
+//For a one-to-many relationship, use @relation(fields: [conversationIds], references: [id]) without specifying a name. For a many-to-many relationship, use @relation("Seen", fields: [seenIds], references: [id]) with a specified name ("Seen" in this case).
+  conversationId String @db.ObjectId
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  senderId String @db.ObjectId
+  sender User @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  // In the above code, onDelete: Cascade is added to the @relation decorator for the conversations field. This means that if a User is deleted, all associated Conversation records will be deleted as well, cascading the deletion.
+// By specifying onDelete: Cascade, you ensure that the relationship between User and Conversation is maintained in the database and any dependent records are automatically removed when the parent record is deleted.
+}
