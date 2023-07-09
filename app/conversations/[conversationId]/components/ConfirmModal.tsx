@@ -34,7 +34,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       toast.success("conversation deleted!");
     })
     .catch(() => toast.error('Something went wrong!'))
-      .finally(() => setIsLoading(false)
+    .finally(() => setIsLoading(false)
      )
   }, [router, conversationId, onClose]);
 
