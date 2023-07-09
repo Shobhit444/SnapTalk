@@ -46,7 +46,7 @@ export async function POST(
         }
       });
 
-       // Update all connections with new conversation
+      // Update all connections with new conversation
       newConversation.users.forEach((user) => {
         if (user.email) {
           pusherServer.trigger(user.email, 'conversation:new', newConversation);
