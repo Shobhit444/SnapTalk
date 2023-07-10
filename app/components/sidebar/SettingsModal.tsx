@@ -79,7 +79,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
             >
               Profile
             </h2>
-            <p className="mt-1 text-sm leading-6 text-gray-600">
+            <p className="mt-1 text-sm leading-6 text-red-600">
               Edit your public information.
             </p>
 
@@ -107,8 +107,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                 </label>
                 <div className="mt-2 flex items-center gap-x-3">
                   <Image
-                    width="48"
-                    height="48" 
+                    width="100"
+                    height="100" 
                     className="rounded-full" 
                     src={image || currentUser?.image || '/images/placeholder.jpg'}
                     alt="Avatar"
@@ -123,7 +123,10 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                       secondary
                       type="button"
                     >
-                      Change
+                      <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+                      Change?
+                    </button>
+                      
                     </Button>
                   </CldUploadButton>
                 </div>
@@ -146,7 +149,10 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
             secondary 
             onClick={onClose}
           >
-            Cancel
+            <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full">
+              Cancel
+            </button>
+            
           </Button>
           <Button 
             disabled={isLoading}
