@@ -63,7 +63,7 @@ model Conversation {
   userIds String[] @db.ObjectId
   users User[] @relation(fields: [userIds], references: [id])
 }
-
+//messages: This is a relationship field that establishes a one-to-many relationship between the Conversation model and the Message model. It relates the messagesIds field of the Conversation model to the id field of the Message model.
 model Message {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   body String?
